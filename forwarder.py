@@ -1,8 +1,8 @@
 import socket
-import sys
-from constants import *
+from sys import argv
+from constantsAndFunctions import *
 
-localIP = sys.argv[1]
+localIP = argv[1]
 localPort   = COM_PORT
 bufferSize  = 1024
 destinationIP = None
