@@ -1,5 +1,5 @@
 import socket
-from constants import *
+from constantsAndFunctions import *
 
 localIP     = "server"
 localPort   = COM_PORT
