@@ -3,9 +3,9 @@ import sys
 from constants import *
 
 localIP = sys.argv[1]
-localPort   = 54321
+localPort   = COM_PORT
 bufferSize  = 1024
-serverIP = ('server', 54321)
+destinationIP = None
 
 UDPForwardSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 UDPForwardSocket.bind((localIP, localPort))
@@ -19,7 +19,6 @@ while(True):
     header = clientMessage[:4]
     print(header)
     clientMessage = clientMessage[4:]
-    print(f"packet received. Destination is node code: 2 [server]")
     if localIP == FORWARDER_IPS['pdf'][0]:
         UDPForwardSocket.sendto(DESTINATION_HEADER+NODE_CODES['server']+clientMessage, FORWARDER_IPS['txt'])
         print(f"Packet received forwarding...")

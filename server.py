@@ -1,7 +1,8 @@
 import socket
+from constants import *
 
 localIP     = "server"
-localPort   = 54321
+localPort   = COM_PORT
 bufferSize  = 1024
 
 UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
