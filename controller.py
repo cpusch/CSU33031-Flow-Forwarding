@@ -1,12 +1,6 @@
 from constants import *
 import socket
 
-localIP = 'controller'
-localPort = COM_PORT
-bufferSize  = 1024
-UDPRouterSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-UDPRouterSocket.bind((localIP, localPort))
-
 HOSTNAME_TO_NODECODE = {
     'workerPDF':'R1',
     'workerTXT':'R2',
@@ -40,6 +34,13 @@ ROUTING_TABLE = {
     
 
 def main():
+    localIP = 'controller'
+    localPort = COM_PORT
+    bufferSize  = 1024
+    UDPRouterSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+    UDPRouterSocket.bind((localIP, localPort))
+
+
     print("Controller up and listening")
     while(True):
         bytesAddressPair = UDPRouterSocket.recvfrom(bufferSize)
@@ -58,14 +59,6 @@ def main():
         except KeyError:
             print("Destination not found")
             UDPRouterSocket.sendto(HEADERS['noDestination'],routerAddress)
-
-
-        
-
-
-
-
-              
 
 
 if __name__ == "__main__":
