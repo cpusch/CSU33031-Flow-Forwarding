@@ -4,8 +4,8 @@ import socket
 localIP = 'controller'
 localPort = COM_PORT
 bufferSize  = 1024
-UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-UDPServerSocket.bind((localIP, localPort))
+UDPRouterSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+UDPRouterSocket.bind((localIP, localPort))
 
 HOSTNAME_TO_NODECODE = {
     'workerPDF':'R1',
@@ -42,7 +42,7 @@ ROUTING_TABLE = {
 def main():
     print("Controller up and listening")
     while(True):
-        bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
+        bytesAddressPair = UDPRouterSocket.recvfrom(bufferSize)
         routerMessage = bytesAddressPair[0]
         routerAddress = bytesAddressPair[1]
         destinationIP = routerMessage.decode()
@@ -51,8 +51,14 @@ def main():
         destinationCode = HOSTNAME_TO_NODECODE[destinationHostname]
         routerHostname = socket.gethostbyaddr(routerAddress)
         routerCode = HOSTNAME_TO_NODECODE[routerHostname]
+        try:
+            nextHopHostname = ROUTING_TABLE[(destinationCode,routerCode)]
+            UDPRouterSocket.sendto(HEADERS['tableUpdate']+nextHopHostname.encode(), routerAddress)
+            print("Destination found sending next hop.")
+        except KeyError:
+            print("Destination not found")
+            UDPRouterSocket.sendto(HEADERS['noDestination'],routerAddress)
 
-        nextHopIP = ROUTING_TABLE[(destinationCode,routerCode)]
 
         
 
