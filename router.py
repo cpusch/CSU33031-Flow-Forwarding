@@ -4,10 +4,22 @@ from constants import *
 from controller import NODECODE_TO_HOSTNAME
 
 
+def updateRoutingTable(destinationCode,UDPForwardSocket:socket.socket,ROUTING_TABLE):
+    UDPForwardSocket.sendto(HEADERS['reqTable']+destinationCode,('controller',COM_PORT))
+    while(True):
+        bytesAddressPair = UDPForwardSocket.recvfrom(1024)
+        encMessage = bytesAddressPair[0]
+        header = encMessage[:3]
+        if header == HEADERS['tableUpdate']:
+            nextHopIP = encMessage[3:].decode()
+            ROUTING_TABLE[destinationCode] = (nextHopIP,COM_PORT)
+            return True
+        elif header == HEADERS['noDestination']:
+            return False
 
 
 def main():
-    # routing table with have format of 'nodeCode of dest':IP
+    # routing table with have format of 'nodeCode of dest':IP to forward to
     ROUTING_TABLE = {}
     localIP = NODECODE_TO_HOSTNAME[argv[1]][0]
     localPort   = COM_PORT
@@ -20,18 +32,24 @@ def main():
 
     # always true and waiting for new packets to com in
     while(True):
+        # que to handle multiple incoming packets
         bytesAddressPair = UDPForwardSocket.recvfrom(bufferSize)
+
         # encoded message
         encMessage = bytesAddressPair[0]
-        header = encMessage[:4]
+        header = encMessage[:3]
 
         if header == HEADERS['message']:
-            destinationCode = encMessage[4:7]
-            payload = encMessage[7:]
-        elif header == HEADERS['tableUpdate']:
-            pass
-        elif header == HEADERS['noDestination']:
-            print("Destination not found dropping packet")
+            destinationCode = encMessage[3:5].decode()
+            payload = encMessage[5:]
+            if destinationCode in ROUTING_TABLE:
+                UDPForwardSocket.sendto(encMessage,ROUTING_TABLE[destinationCode])
+            else:
+                sendPacket = updateRoutingTable(destinationCode,UDPForwardSocket,ROUTING_TABLE)
+                if sendPacket:  
+                    UDPForwardSocket.sendto(encMessage,ROUTING_TABLE[destinationCode])
+                else:
+                    print("Destination Unknown to controller. Dropping Packet")
 
 
 
