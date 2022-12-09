@@ -11,12 +11,12 @@ HOSTNAME_TO_NODECODE = {
 }
 
 NODECODE_TO_HOSTNAME = {
-    'R1':('workerPDF',COM_PORT),
-    'R2':('workerTXT',COM_PORT),
-    'R3':('workerImage',COM_PORT),
-    'E1':('client',COM_PORT),
-    'E2':('client2',COM_PORT),
-    'E3':('server',COM_PORT)
+    'R1':'workerPDF',
+    'R2':'workerTXT',
+    'R3':'workerImage',
+    'E1':'client',
+    'E2':'client2',
+    'E3':'server'
 }
 
 ROUTING_TABLE = {
@@ -46,19 +46,20 @@ def main():
         bytesAddressPair = UDPRouterSocket.recvfrom(bufferSize)
         routerMessage = bytesAddressPair[0]
         routerAddress = bytesAddressPair[1]
-        destinationIP = routerMessage.decode()
-        
-        destinationHostname = socket.gethostbyaddr(destinationIP)
-        destinationCode = HOSTNAME_TO_NODECODE[destinationHostname]
-        routerHostname = socket.gethostbyaddr(routerAddress)
-        routerCode = HOSTNAME_TO_NODECODE[routerHostname]
-        try:
-            nextHopHostname = ROUTING_TABLE[(destinationCode,routerCode)]
-            UDPRouterSocket.sendto(HEADERS['tableUpdate']+nextHopHostname.encode(), routerAddress)
-            print("Destination found sending next hop.")
-        except KeyError:
-            print("Destination not found")
-            UDPRouterSocket.sendto(HEADERS['noDestination'],routerAddress)
+
+        # resolves routers ip to hostname to then find the routers code in the dict
+        routerCode = HOSTNAME_TO_NODECODE[socket.gethostbyaddr(routerAddress[0])]
+        header = routerMessage[:3]
+
+        if header == HEADERS['reqTable']:
+            destinationCode = routerMessage[3:].decode()
+            try:
+                nextHopIP = socket.gethostbyname(ROUTING_TABLE[(destinationCode,routerCode)])
+                UDPRouterSocket.sendto(HEADERS['tableUpdate']+nextHopIP.encode(), routerAddress)
+                print("Destination found sending next hop.")
+            except KeyError:
+                print("Destination not found")
+                UDPRouterSocket.sendto(HEADERS['noDestination'],routerAddress)
 
 
 if __name__ == "__main__":
