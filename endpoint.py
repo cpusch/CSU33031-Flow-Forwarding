@@ -1,14 +1,27 @@
 import socket
-from constantsAndFunctions import *
+from constants import *
+from controller import NODECODE_TO_HOSTNAME
 from sys import argv
 
+def main():
+    localIP = NODECODE_TO_HOSTNAME[argv[1]][0]
+    bufferSize = 1024
 
-localIP = ENDPOINT_IPS[argv[1]][0]
-forwarderAddress = (ROUTER_IPS['R1'])
-bufferSize = 1024
+    UDPEndpointSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+    UDPEndpointSocket.bind(localIP)
+    while(True):
+        runMode = input("Would you like to send or receive a message? ")
+        if runMode.lower() == "send":
+            break
+        elif runMode.lower() == "receive":
+            break
+        else:
+            print("Please enter 'send' or 'receive'.")
 
-UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-UDPClientSocket.bind(localIP)
+    while(True):    
+        bytesAddressPair = UDPEndpointSocket.recvfrom(bufferSize)
+        clientMessage = bytesAddressPair[0]
+        clientAddress = bytesAddressPair[1]
 
-UDPClientSocket.sendto(HEADERS['dest']+ENDPOINT_IPS['E3']+bytesToSend, forwarderAddress)
-print(f"Message: '{bytesToSend}' sent to server")
+if __name__ == "__main__":
+    main()
