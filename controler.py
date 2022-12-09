@@ -1,4 +1,4 @@
-from constantsAndFunctions import *
+from constants import *
 import socket
 
 localIP = 'controller'
