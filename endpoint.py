@@ -38,7 +38,7 @@ def main():
             clientMessage = bytesAddressPair[0]
             clientAddress = bytesAddressPair[1]
             decodedMessage = clientMessage.decode()
-            print(f"Message Received from {decodedMessage[8:10]}: {decodedMessage[9:]}")
+            print(f"Message Received from {decodedMessage[7:9]}: {decodedMessage[9:]}")
         else:
             message = input("Please enter the message you would like to send then hit enter: ").encode()
             destination = input("Please enter your destination Nodecode then hit enter: ").encode()
