@@ -13,8 +13,6 @@ def updateRoutingTable(destinationCode,UDPForwardSocket:socket.socket,ROUTING_TA
         header = encMessage[:3]
         if header == HEADERS['tableUpdate']:
             nextHopIP = encMessage[3:].decode()
-            print(destinationCode.decode())
-            print(nextHopIP)
             ROUTING_TABLE[destinationCode.decode()] = (nextHopIP,COM_PORT)
             return True
         elif header == HEADERS['noDestination']:
@@ -49,7 +47,7 @@ def main():
             else:
                 sendPacket = updateRoutingTable(destinationCode,UDPForwardSocket,ROUTING_TABLE)
                 if sendPacket:  
-                    UDPForwardSocket.sendto(encMessage,ROUTING_TABLE[destinationCode])
+                    UDPForwardSocket.sendto(encMessage,ROUTING_TABLE[destinationCode.decode()])
                 else:
                     print("Destination Unknown to controller. Dropping Packet")
 
