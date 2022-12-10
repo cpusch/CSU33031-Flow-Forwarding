@@ -46,7 +46,8 @@ def main():
         bytesAddressPair = UDPRouterSocket.recvfrom(bufferSize)
         routerMessage = bytesAddressPair[0]
         routerAddress = bytesAddressPair[1]
-
+        print(routerAddress)
+        return
         # resolves routers ip to hostname to then find the routers code in the dict
         routerCode = HOSTNAME_TO_NODECODE[socket.gethostbyaddr(routerAddress[0])]
         header = routerMessage[:3]
