@@ -24,9 +24,9 @@ def main():
     while(True):
         runMode = input("Would you like to send or receive a message? ")
         if runMode.lower() == "send":
-            isReceiving = True
             break
         elif runMode.lower() == "receive":
+            isReceiving = True
             break
         else:
             print("Please enter 'send' or 'receive'.")
