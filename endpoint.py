@@ -20,7 +20,7 @@ def main():
     routerIP = getRouterIP(localIP)
 
     UDPEndpointSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-    UDPEndpointSocket.bind(localIP)
+    UDPEndpointSocket.bind(localIP,COM_PORT)
     while(True):
         runMode = input("Would you like to send or receive a message? ")
         if runMode.lower() == "send":
