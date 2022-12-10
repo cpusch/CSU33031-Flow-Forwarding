@@ -29,7 +29,13 @@ def main():
 
     UDPForwardSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
     UDPForwardSocket.bind((localIP, localPort))
-    print("Forwarder up and listening")
+    print("Router up and listening")
+    print("Current Routing Table")
+    print("""
+    Node Code of Dest|IP to forward to
+    __________________________________
+    NONE             |NONE
+    """)
 
     # always true and waiting for new packets to com in
     while(True):
@@ -48,6 +54,8 @@ def main():
                 sendPacket = updateRoutingTable(destinationCode,UDPForwardSocket,ROUTING_TABLE)
                 if sendPacket:  
                     UDPForwardSocket.sendto(encMessage,ROUTING_TABLE[destinationCode.decode()])
+                    print("Routing Table Updated")
+                    print(f"{destinationCode}               |{ROUTING_TABLE[destinationCode.decode()]}")
                 else:
                     print("Destination Unknown to controller. Dropping Packet")
 
