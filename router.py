@@ -42,8 +42,8 @@ def main():
     print("""
     Node Code of Dest|IP to forward to
     __________________________________
+    NONE             |NONE
     """)
-    print(f"    {destinationCode}               |{ROUTING_TABLE[destinationCode.decode()]}")
 
     # always true and waiting for new packets to com in
     while(True):
