@@ -15,7 +15,8 @@ def getRouterIP(localIP):
 
 def main():
     isReceiving = False
-    localIP = NODECODE_TO_HOSTNAME[argv[1]]
+    NODE_CODE = argv[1]
+    localIP = NODECODE_TO_HOSTNAME[NODE_CODE]
     bufferSize = 1024
     routerIP = getRouterIP(localIP)
 
@@ -36,11 +37,15 @@ def main():
             bytesAddressPair = UDPEndpointSocket.recvfrom(bufferSize)
             clientMessage = bytesAddressPair[0]
             clientAddress = bytesAddressPair[1]
-            print(f"Message Received: {clientMessage.decode()[5:]}")
+            print(f"Message Received: {clientMessage.decode()[9:]}")
         else:
             message = input("Please enter the message you would like to send then hit enter: ").encode()
             destination = input("Please enter your destination Nodecode then hit enter: ").encode()
-            UDPEndpointSocket.sendto(HEADERS['message']+destination+message,routerIP)
+            # these next three lines create the header information sent in the packet
+            destinationInfo = len(destination).encode() + destination
+            sourceInfo = len(NODE_CODE).encode()+NODE_CODE.encode()
+            srcDestInfo = destinationInfo + sourceInfo
+            UDPEndpointSocket.sendto(HEADERS['message']+srcDestInfo+message,routerIP)
             while(True):
                 userContinue = input("Would you like to wait for a response (Yes) or send another message(No)? ").lower()
                 if userContinue == 'yes':
