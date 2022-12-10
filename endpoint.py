@@ -36,7 +36,7 @@ def main():
             bytesAddressPair = UDPEndpointSocket.recvfrom(bufferSize)
             clientMessage = bytesAddressPair[0]
             clientAddress = bytesAddressPair[1]
-            print(f"Message Received: {clientMessage.decode()}")
+            print(f"Message Received: {clientMessage.decode()[4:]}")
         else:
             message = input("Please enter the message you would like to send then hit enter: ").encode()
             destination = input("Please enter your destination Nodecode then hit enter: ").encode()
