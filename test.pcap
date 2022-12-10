@@ -1,0 +1,12 @@
+13:34:42.049028 IP6 fe80::ecd1:2fff:fe75:e9b > ip6-allrouters: ICMP6, router solicitation, length 16
+13:34:42.449436 IP 12b12b32eed5.33572 > 192.168.65.5.domain: 45314+ PTR? b.9.e.0.5.7.e.f.f.f.f.2.1.d.c.e.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa. (90)
+13:34:43.465308 IP 192.168.65.5.domain > 12b12b32eed5.33572: 45314 NXDomain 0/0/0 (90)
+13:34:43.489496 IP 12b12b32eed5.32933 > 192.168.65.5.domain: 36369+ PTR? 5.65.168.192.in-addr.arpa. (43)
+13:34:44.505654 IP 192.168.65.5.domain > 12b12b32eed5.32933: 36369 NXDomain 0/0/0 (43)
+13:34:47.489213 ARP, Request who-has 172.20.0.1 tell 12b12b32eed5, length 28
+13:34:47.489255 ARP, Reply 172.20.0.1 is-at 02:42:fc:f3:d6:f7 (oui Unknown), length 28
+13:34:47.649774 IP 12b12b32eed5.48130 > 192.168.65.5.domain: 16143+ PTR? 1.0.20.172.in-addr.arpa. (41)
+13:34:48.529097 ARP, Request who-has 12b12b32eed5 tell 172.20.0.1, length 28
+13:34:48.529104 ARP, Reply 12b12b32eed5 is-at 02:42:ac:14:00:09 (oui Unknown), length 28
+13:34:48.664777 IP 192.168.65.5.domain > 12b12b32eed5.48130: 16143 NXDomain 0/0/0 (41)
+
