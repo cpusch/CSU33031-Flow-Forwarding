@@ -6,7 +6,7 @@ from controller import NODECODE_TO_HOSTNAME
 
 def updateRoutingTable(destinationCode,UDPForwardSocket:socket.socket,ROUTING_TABLE):
     UDPForwardSocket.sendto(HEADERS['reqTable']+destinationCode,('controller',COM_PORT))
-    print("Requesting Routing Table Update")
+    print("New Destination. Requesting Routing Table Update")
     while(True):
         bytesAddressPair = UDPForwardSocket.recvfrom(1024)
         encMessage = bytesAddressPair[0]
@@ -17,6 +17,7 @@ def updateRoutingTable(destinationCode,UDPForwardSocket:socket.socket,ROUTING_TA
             return True
         elif header == HEADERS['noDestination']:
             return False
+
 def printRoutingTable(ROUTING_TABLE):
     print("Routing Table Updated")
     print("""
@@ -58,7 +59,7 @@ def main():
             destinationCode = encMessage[3:5]
             if destinationCode.decode() in ROUTING_TABLE:
                 UDPForwardSocket.sendto(encMessage,ROUTING_TABLE[destinationCode.decode()])
-                print("Message in routing table. Forwarding...")
+                print("Destination in routing table. Forwarding...")
             else:
                 sendPacket = updateRoutingTable(destinationCode,UDPForwardSocket,ROUTING_TABLE)
                 if sendPacket:  
