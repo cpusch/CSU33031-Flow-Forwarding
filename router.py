@@ -6,6 +6,7 @@ from controller import NODECODE_TO_HOSTNAME
 
 def updateRoutingTable(destinationCode,UDPForwardSocket:socket.socket,ROUTING_TABLE):
     UDPForwardSocket.sendto(HEADERS['reqTable']+destinationCode,('controller',COM_PORT))
+    print("Requesting Routing Table Update")
     while(True):
         bytesAddressPair = UDPForwardSocket.recvfrom(1024)
         encMessage = bytesAddressPair[0]
