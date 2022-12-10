@@ -21,7 +21,7 @@ def updateRoutingTable(destinationCode,UDPForwardSocket:socket.socket,ROUTING_TA
 def main():
     # routing table with have format of 'nodeCode of dest':IP to forward to
     ROUTING_TABLE = {}
-    localIP = NODECODE_TO_HOSTNAME[argv[1]][0]
+    localIP = NODECODE_TO_HOSTNAME[argv[1]]
     localPort   = COM_PORT
     bufferSize  = 1024
     destinationIP = None
