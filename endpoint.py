@@ -39,6 +39,16 @@ def main():
             clientAddress = bytesAddressPair[1]
             decodedMessage = clientMessage.decode()
             print(f"Message Received from {decodedMessage[7:9]}: {decodedMessage[9:]}")
+            while(True):
+                runMode = input("Would you like to respond(yes) or continue receiving(no)? ")
+                if runMode.lower() == "yes":
+                    isReceiving = False
+                    break
+                elif runMode.lower() == "receive":
+                    break
+                else:
+                    print("Please enter 'send' or 'receive'.")
+    
         else:
             message = input("Please enter the message you would like to send then hit enter: ").encode()
             destination = input("Please enter your destination Nodecode then hit enter: ").encode()
