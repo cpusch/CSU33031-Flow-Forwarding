@@ -42,8 +42,8 @@ def main():
             message = input("Please enter the message you would like to send then hit enter: ").encode()
             destination = input("Please enter your destination Nodecode then hit enter: ").encode()
             # these next three lines create the header information sent in the packet
-            destinationInfo = len(destination).encode() + destination
-            sourceInfo = len(NODE_CODE).encode()+NODE_CODE.encode()
+            destinationInfo = str(len(destination)).encode() + destination
+            sourceInfo = str(len(NODE_CODE)).encode()+NODE_CODE.encode()
             srcDestInfo = destinationInfo + sourceInfo
             UDPEndpointSocket.sendto(HEADERS['message']+srcDestInfo+message,routerIP)
             while(True):
