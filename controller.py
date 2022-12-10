@@ -1,5 +1,6 @@
 from constants import *
 import socket
+import json
 
 HOSTNAME_TO_NODECODE = {
     'workerPDF':'R1',
@@ -42,6 +43,11 @@ def main():
 
 
     print("Controller up and listening")
+    print(f"Current network view is: ")
+    print("Message Destination|Router Requesting Hop|Next Hop")
+    print("__________________________________________________")
+    for key,data in ROUTING_TABLE.items():
+        print(f"|{key[0]}                |{key[1]}                   |{data}")
     while(True):
         bytesAddressPair = UDPRouterSocket.recvfrom(bufferSize)
         routerMessage = bytesAddressPair[0]
@@ -58,7 +64,8 @@ def main():
                 nextHopHostname = NODECODE_TO_HOSTNAME[ROUTING_TABLE[(destinationCode,routerCode)]]
                 nextHopIP = socket.gethostbyname(nextHopHostname)
                 UDPRouterSocket.sendto(HEADERS['tableUpdate']+nextHopIP.encode(), routerAddress)
-                print("Destination found sending next hop.")
+                print(f"Router: {routerCode} requested next hop.")
+                print(f"Next hop is: {HOSTNAME_TO_NODECODE[nextHopHostname]} with IP: {nextHopIP}")
             except KeyError:
                 print("Destination not found")
                 UDPRouterSocket.sendto(HEADERS['noDestination'],routerAddress)
