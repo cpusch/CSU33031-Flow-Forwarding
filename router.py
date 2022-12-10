@@ -24,7 +24,7 @@ def printRoutingTable(ROUTING_TABLE):
     __________________________________
     """)
     for key,data in ROUTING_TABLE.items():
-        print(f"    {key}               |{data}")
+        print(f"    {key}               |{data[0]}")
 
 
 def main():
