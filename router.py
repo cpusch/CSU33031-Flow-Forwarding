@@ -17,6 +17,14 @@ def updateRoutingTable(destinationCode,UDPForwardSocket:socket.socket,ROUTING_TA
             return True
         elif header == HEADERS['noDestination']:
             return False
+def printRoutingTable(ROUTING_TABLE):
+    print("Routing Table Updated")
+    print("""
+    Node Code of Dest|IP to forward to
+    __________________________________
+    """)
+    for key,data in ROUTING_TABLE.items():
+        print(f"|{key[0]}                |{key[1]}                   |{data}")
 
 
 def main():
@@ -34,8 +42,8 @@ def main():
     print("""
     Node Code of Dest|IP to forward to
     __________________________________
-    NONE             |NONE
     """)
+    print(f"    {destinationCode}               |{ROUTING_TABLE[destinationCode.decode()]}")
 
     # always true and waiting for new packets to com in
     while(True):
@@ -55,8 +63,7 @@ def main():
                 sendPacket = updateRoutingTable(destinationCode,UDPForwardSocket,ROUTING_TABLE)
                 if sendPacket:  
                     UDPForwardSocket.sendto(encMessage,ROUTING_TABLE[destinationCode.decode()])
-                    print("Routing Table Updated")
-                    print(f"{destinationCode}               |{ROUTING_TABLE[destinationCode.decode()]}")
+                    printRoutingTable(ROUTING_TABLE)
                 else:
                     print("Destination Unknown to controller. Dropping Packet")
 
