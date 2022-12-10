@@ -50,6 +50,7 @@ def main():
             destinationCode = encMessage[3:5]
             if destinationCode.decode() in ROUTING_TABLE:
                 UDPForwardSocket.sendto(encMessage,ROUTING_TABLE[destinationCode.decode()])
+                print("Message in routing table. Forwarding...")
             else:
                 sendPacket = updateRoutingTable(destinationCode,UDPForwardSocket,ROUTING_TABLE)
                 if sendPacket:  
