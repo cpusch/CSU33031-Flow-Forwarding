@@ -41,21 +41,22 @@ def main():
     UDPRouterSocket.bind((localIP, localPort))
 
 
-    print("Controller up and listening")
     while(True):
+        print("Controller up and listening")
         bytesAddressPair = UDPRouterSocket.recvfrom(bufferSize)
         routerMessage = bytesAddressPair[0]
         routerAddress = bytesAddressPair[1]
-        print(routerAddress)
-        return
+        
         # resolves routers ip to hostname to then find the routers code in the dict
-        routerCode = HOSTNAME_TO_NODECODE[socket.gethostbyaddr(routerAddress[0])]
+        routerHostname = socket.gethostbyaddr(routerAddress[0])[0].split('.')[0]
+        routerCode = HOSTNAME_TO_NODECODE[routerHostname]
         header = routerMessage[:3]
 
         if header == HEADERS['reqTable']:
             destinationCode = routerMessage[3:].decode()
             try:
-                nextHopIP = socket.gethostbyname(ROUTING_TABLE[(destinationCode,routerCode)])
+                nextHopHostname = NODECODE_TO_HOSTNAME[ROUTING_TABLE[(destinationCode,routerCode)]]
+                nextHopIP = socket.gethostbyname(nextHopHostname)
                 UDPRouterSocket.sendto(HEADERS['tableUpdate']+nextHopIP.encode(), routerAddress)
                 print("Destination found sending next hop.")
             except KeyError:
