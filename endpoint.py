@@ -15,10 +15,8 @@ def getRouterIP(localIP):
 
 def main():
     isReceiving = False
-    localIP = NODECODE_TO_HOSTNAME[argv[1]][0]
+    localIP = NODECODE_TO_HOSTNAME[argv[1]]
     bufferSize = 1024
-    print(localIP)
-    return
     routerIP = getRouterIP(localIP)
 
     UDPEndpointSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
