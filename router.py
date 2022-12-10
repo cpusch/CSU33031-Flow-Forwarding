@@ -12,7 +12,7 @@ def updateRoutingTable(destinationCode,UDPForwardSocket:socket.socket,ROUTING_TA
         header = encMessage[:3]
         if header == HEADERS['tableUpdate']:
             nextHopIP = encMessage[3:].decode()
-            ROUTING_TABLE[destinationCode] = (nextHopIP,COM_PORT)
+            ROUTING_TABLE[destinationCode.decode()] = (nextHopIP,COM_PORT)
             return True
         elif header == HEADERS['noDestination']:
             return False
@@ -40,9 +40,9 @@ def main():
         header = encMessage[:3]
 
         if header == HEADERS['message']:
-            destinationCode = encMessage[3:5].decode()
+            destinationCode = encMessage[3:5]
             payload = encMessage[5:]
-            if destinationCode in ROUTING_TABLE:
+            if destinationCode.decode() in ROUTING_TABLE:
                 UDPForwardSocket.sendto(encMessage,ROUTING_TABLE[destinationCode])
             else:
                 sendPacket = updateRoutingTable(destinationCode,UDPForwardSocket,ROUTING_TABLE)
